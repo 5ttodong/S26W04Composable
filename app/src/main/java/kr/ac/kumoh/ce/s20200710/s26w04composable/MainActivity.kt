@@ -51,6 +51,7 @@ fun MainScreen(){
             modifier = Modifier.padding(innerPadding),
         ) {
             Count()
+            Count()
         }
     }
 }
