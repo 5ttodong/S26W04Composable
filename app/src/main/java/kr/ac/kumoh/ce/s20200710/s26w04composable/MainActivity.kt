@@ -26,10 +26,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontVariation.weight
 import kr.ac.kumoh.ce.s20200710.s26w04composable.ui.theme.S26W04ComposableTheme
 
 class MainActivity : ComponentActivity() {
@@ -43,32 +45,62 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 @Composable
 fun MainScreen() {
-    var count1 by remember { mutableIntStateOf(0) }
-    var count2 by remember { mutableIntStateOf(0) }
+    val counters = remember {
+        mutableStateListOf(
+            mutableIntStateOf(0),
+            mutableIntStateOf(0)
+        )
+    }
+
+    val modifiers = remember {
+        listOf(
+            Modifier.background(Color(0xFFE8DEF8)),
+            Modifier.background(Color(0XFFE9F680))
+        )
+    }
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
             modifier = Modifier.padding(innerPadding)
         ) {
-            Counter(
-                modifier = Modifier.background(Color(0xFFE8DEF8)),
-                count = count1
-            ) {
-                count1 = it
-            }
-
-            Counter(
-                modifier = Modifier.background(Color(0XFFE9F680)),
-                count = count2
-            ) {
-                count2 = it
+            counters.forEachIndexed { index, state ->
+                Counter(
+                    modifier = modifiers[index],
+                    count = state.intValue
+                ) {
+                    state.intValue = it
+                }
             }
         }
     }
 }
+//@Composable
+//fun MainScreen() {
+//    var count1 by remember { mutableIntStateOf(0) }
+//    var count2 by remember { mutableIntStateOf(0) }
+//
+//    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+//        Column(
+//            modifier = Modifier.padding(innerPadding)
+//        ) {
+//            Counter(
+//                modifier = Modifier.background(Color(0xFFE8DEF8)),
+//                count = count1
+//            ) {
+//                count1 = it
+//            }
+//
+//            Counter(
+//                modifier = Modifier.background(Color(0XFFE9F680)),
+//                count = count2
+//            ) {
+//                count2 = it
+//            }
+//        }
+//    }
+//}
 
 
 
@@ -81,7 +113,9 @@ fun ColumnScope.Counter( modifier: Modifier = Modifier,
     var expanded by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier
+        modifier =  modifier//Modifier
+            //Modifier = 새로운 Modifier를 만든다.
+            //modifier = 매개변수로 전달받은 Modifier를 사용한다.
             .weight(1F)
             .padding(8.dp),
             //.background(Color(0XFFE9F680)),
